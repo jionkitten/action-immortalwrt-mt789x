@@ -1,0 +1,48 @@
+#!/bin/sh
+
+wan_dev="wan6"
+
+[ "$HOTPLUG_TYPE" = "iface" ] || exit 0
+[ "$INTERFACE" = "$wan_dev" ] || exit 0
+
+RTMETRIC=127
+
+. /lib/functions/network.sh
+
+network_get_physdev lan_dev lan || exit 0
+
+ifup_cb() {
+        local _lan_dev="$1"
+        local _metric="$2"
+
+        local wan_subnet
+        network_get_subnet6 wan_subnet "$wan_dev" || return
+        _wan_network=$(owipcalc "${wan_subnet}" network)
+
+        ip -6 route replace "$_wan_network" dev "$_lan_dev" metric "$_metric"
+}
+
+ifdown_cb() {
+        local _lan_dev="$1"
+        local _metric="$2"
+
+        ip -6 route flush dev "$_lan_dev" metric "$_metric"
+}
+
+case "$ACTION" in
+        ifup)
+                ifup_cb "$lan_dev" "$RTMETRIC"
+                ;;
+        ifdown)
+                ifdown_cb "$lan_dev" "$RTMETRIC"
+                ;;
+        ifupdate)
+                ifdown_cb "$lan_dev" "$RTMETRIC"
+                sleep 1
+                ifup_cb "$lan_dev" "$RTMETRIC"
+                ;;
+        *)
+                ;;
+esac
+
+exit 0
