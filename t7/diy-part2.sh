@@ -5,6 +5,9 @@ CUR_PWD=$(pwd)
 cp $GITHUB_WORKSPACE/custom/luci-* feeds/luci
 cd feeds/luci && git apply luci-* && cd $CUR_PWD
 
+cp $GITHUB_WORKSPACE/custom/glib2.patch feeds/packages
+cd feeds/packages && git apply glib2.patch && cd $CUR_PWD
+
 mkdir -p files/etc
 cp -r $GITHUB_WORKSPACE/custom/hotplug.d files/etc
 

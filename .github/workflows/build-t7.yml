@@ -53,6 +53,16 @@ jobs:
           git clone $REPO_URL -b $REPO_BRANCH openwrt
           ln -sf /workdir/openwrt $GITHUB_WORKSPACE/openwrt
 
+      - name: cache
+        uses: klever1988/cachewrtbuild@main
+        with:
+          ccache: false
+          toolchain: true
+          skip: true
+          clean: false
+          mixkey: t7
+          prefix: openwrt
+
       - name: Load custom feeds
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
