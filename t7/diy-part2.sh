@@ -17,6 +17,7 @@ cp -r $GITHUB_WORKSPACE/custom/hotplug.d files/etc
 # https://github.com/sbwml/luci-app-alist
 rm -rf feeds/packages/lang/golang
 svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
+sudo apt install libfuse-dev
 git clone https://github.com/sbwml/luci-app-alist package/alist
 
 mkdir -p files/usr/share/geodata
