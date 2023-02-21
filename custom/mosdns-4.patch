@@ -1,0 +1,32 @@
+diff --git a/libs/glib2/Makefile b/libs/glib2/Makefile
+index 3e46675ff..c0bfb12ae 100644
+--- a/libs/glib2/Makefile
++++ b/libs/glib2/Makefile
+@@ -26,6 +26,7 @@ PKG_BUILD_DEPENDS:=meson/host gettext-full libiconv/host
+ HOST_BUILD_DEPENDS:=meson/host gettext-full/host libiconv/host libffi/host
+ PKG_CONFIG_DEPENDS:=CONFIG_BUILD_NLS
+ PKG_INSTALL:=1
++PKG_FORTIFY_SOURCE:=0
+ 
+ include $(INCLUDE_DIR)/host-build.mk
+ include $(INCLUDE_DIR)/package.mk
+diff --git a/net/mosdns/Makefile b/net/mosdns/Makefile
+index f2cdb6dff..f671a6de4 100644
+--- a/net/mosdns/Makefile
++++ b/net/mosdns/Makefile
+@@ -5,12 +5,12 @@
+ include $(TOPDIR)/rules.mk
+ 
+ PKG_NAME:=mosdns
+-PKG_VERSION:=5.1.1
+-PKG_RELEASE:=1
++PKG_VERSION:=4.5.3
++PKG_RELEASE:=$(AUTORELEASE)
+ 
+ PKG_SOURCE:=$(PKG_NAME)-$(PKG_VERSION).tar.gz
+ PKG_SOURCE_URL:=https://codeload.github.com/IrineSistiana/mosdns/tar.gz/v$(PKG_VERSION)?
+-PKG_HASH:=b184f4e3cb8b8017c4a7eb0742c3e80da54e46915e987b5d79e312da47fd751c
++PKG_HASH:=2a13b1b1d862731cf946a8ceaa99523a0eb0eaae56045dd31207b61a5a6d47ae
+ 
+ PKG_LICENSE:=GPL-3.0
+ PKG_LICENSE_FILES:=LICENSE
