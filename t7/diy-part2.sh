@@ -14,6 +14,7 @@ cp -r $GITHUB_WORKSPACE/custom/hotplug.d files/etc
 # https://github.com/sbwml/luci-app-alist
 rm -rf feeds/packages/lang/golang
 svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
+git clone https://github.com/sbwml/luci-app-alist package/alist
 
 mkdir -p files/usr/share/geodata
 curl -L https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat -o "files/usr/share/geodata/geosite.dat"
@@ -21,8 +22,8 @@ curl -L https://github.com/Loyalsoldier/geoip/releases/latest/download/geoip-onl
 
 mkdir -p files/usr/bin
 CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
-curl -L $CLASH_META_URL -o files/usr/bin/clash
-chmod a+x files/usr/bin/clash
+curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
+gzip -d files/usr/bin/clash.gz
 
 curl -LO https://github.com/MetaCubeX/subconverter/releases/download/Alpha/subconverter_aarch64.tar.gz
 tar xzf subconverter_aarch64.tar.gz
