@@ -31,6 +31,7 @@ mkdir -p files/usr/bin
 CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
 curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
 gzip -d files/usr/bin/clash.gz
+chmod a+x files/usr/bin/clash
 
 curl -LO https://github.com/MetaCubeX/subconverter/releases/download/Alpha/subconverter_aarch64.tar.gz
 tar xzf subconverter_aarch64.tar.gz

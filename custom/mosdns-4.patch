@@ -1,15 +1,3 @@
-diff --git a/libs/glib2/Makefile b/libs/glib2/Makefile
-index 3e46675ff..c0bfb12ae 100644
---- a/libs/glib2/Makefile
-+++ b/libs/glib2/Makefile
-@@ -26,6 +26,7 @@ PKG_BUILD_DEPENDS:=meson/host gettext-full libiconv/host
- HOST_BUILD_DEPENDS:=meson/host gettext-full/host libiconv/host libffi/host
- PKG_CONFIG_DEPENDS:=CONFIG_BUILD_NLS
- PKG_INSTALL:=1
-+PKG_FORTIFY_SOURCE:=0
- 
- include $(INCLUDE_DIR)/host-build.mk
- include $(INCLUDE_DIR)/package.mk
 diff --git a/net/mosdns/Makefile b/net/mosdns/Makefile
 index f2cdb6dff..f671a6de4 100644
 --- a/net/mosdns/Makefile

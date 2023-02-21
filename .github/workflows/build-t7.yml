@@ -61,7 +61,7 @@ jobs:
           skip: true
           clean: false
           mixkey: t7
-          prefix: openwrt
+          prefix: ${{ github.workspace }}/openwrt
 
       - name: Load custom feeds
         run: |
@@ -126,7 +126,7 @@ jobs:
         id: tag
         if: env.UPLOAD_RELEASE == 'true' && !cancelled()
         run: |
-          echo "release_tag=Immortalwrt-360-T7-$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
+          echo "release_tag=$DEVICE_NAME-$(date +"%Y.%m.%d-%H%M")" >> $GITHUB_OUTPUT
           touch release.txt
           echo "status=success" >> $GITHUB_OUTPUT
 
