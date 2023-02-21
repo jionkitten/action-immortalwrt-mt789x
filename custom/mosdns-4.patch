@@ -1,8 +1,8 @@
 diff --git a/net/mosdns/Makefile b/net/mosdns/Makefile
-index f2cdb6dff..f671a6de4 100644
+index f2cdb6dff..40c0022f8 100644
 --- a/net/mosdns/Makefile
 +++ b/net/mosdns/Makefile
-@@ -5,12 +5,12 @@
+@@ -5,26 +5,21 @@
  include $(TOPDIR)/rules.mk
  
  PKG_NAME:=mosdns
@@ -18,3 +18,49 @@ index f2cdb6dff..f671a6de4 100644
  
  PKG_LICENSE:=GPL-3.0
  PKG_LICENSE_FILES:=LICENSE
+ PKG_MAINTAINER:=Tianling Shen <cnsztl@immortalwrt.org>
+ 
+-PKG_BUILD_DEPENDS:=golang/host
+ PKG_BUILD_PARALLEL:=1
+ PKG_USE_MIPS16:=0
+ 
+-GO_PKG:=github.com/IrineSistiana/mosdns
+-GO_PKG_LDFLAGS_X:=main.version=v$(PKG_VERSION)
+-
+ include $(INCLUDE_DIR)/package.mk
+-include ../../lang/golang/golang-package.mk
+ 
+ define Package/mosdns
+   SECTION:=net
+@@ -36,11 +31,7 @@ define Package/mosdns
+   PROVIDES:=mosdns-neo
+ endef
+ 
+-GO_PKG_TARGET_VARS:=$(filter-out CGO_ENABLED=%,$(GO_PKG_TARGET_VARS)) CGO_ENABLED=0
+-
+ define Package/mosdns/install
+-	$(call GoPackage/Package/Install/Bin,$(1))
+-
+ 	$(INSTALL_DIR) $(1)/etc/init.d
+ 	$(INSTALL_BIN) $(PKG_BUILD_DIR)/scripts/openwrt/mosdns-init-openwrt $(1)/etc/init.d/mosdns
+ 
+@@ -48,16 +39,10 @@ define Package/mosdns/install
+ 	$(INSTALL_DATA) ./files/config.yaml $(1)/etc/mosdns/config.yaml
+ endef
+ 
+-define Package/mosdns/postinst
+-#!/bin/sh
++define Build/Configure
++endef
+ 
+-# check if we are on real system
+-if [ -z "$${IPKG_INSTROOT}" ]; then
+-	/etc/init.d/mosdns stop >/dev/null 2>&1
+-	/etc/init.d/mosdns disable >/dev/null 2>&1
+-fi
+-exit 0
++define Build/Compile
+ endef
+ 
+-$(eval $(call GoBinPackage,mosdns))
+ $(eval $(call BuildPackage,mosdns))

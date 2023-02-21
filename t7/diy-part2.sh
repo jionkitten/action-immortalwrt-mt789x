@@ -12,6 +12,7 @@ cd "$CUR_PWD"
 
 cp "$GITHUB_WORKSPACE"/custom/mosdns-4.patch feeds/packages
 cd feeds/packages && git apply mosdns-4.patch
+rm -rf net/mosdns/patches
 cd "$CUR_PWD"
 
 mkdir -p files/etc
@@ -32,6 +33,11 @@ CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/Clash.Meta/releases
 curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
 gzip -d files/usr/bin/clash.gz
 chmod a+x files/usr/bin/clash
+
+curl -LO https://github.com/IrineSistiana/mosdns/releases/download/v4.5.3/mosdns-linux-arm64.zip
+unzip mosdns-linux-arm64.zip -d /tmp
+cp /tmp/mosdns files/usr/bin/
+chmod a+x files/usr/bin/mosdns
 
 curl -LO https://github.com/MetaCubeX/subconverter/releases/download/Alpha/subconverter_aarch64.tar.gz
 tar xzf subconverter_aarch64.tar.gz
