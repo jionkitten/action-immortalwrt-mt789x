@@ -29,9 +29,12 @@ curl -L https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download
 curl -L https://github.com/Loyalsoldier/geoip/releases/latest/download/geoip-only-cn-private.dat -o "files/usr/share/geodata/geoip.dat"
 
 mkdir -p files/usr/bin
-CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
-curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
-gzip -d files/usr/bin/clash.gz
+# CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
+# curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
+# gzip -d files/usr/bin/clash.gz
+
+# revert to version 20230209 VLess bug
+cp "$GITHUB_WORKSPACE"/custom/clash files/usr/bin/
 chmod a+x files/usr/bin/clash
 
 curl -LO https://github.com/IrineSistiana/mosdns/releases/download/v4.5.3/mosdns-linux-arm64.zip
