@@ -32,6 +32,7 @@ mkdir -p files/usr/bin
 CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/Clash.Meta/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
 curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
 gzip -d files/usr/bin/clash.gz
+chmod a+x /usr/bin/clash
 
 # revert to version 20230209 VLess bug
 # cp "$GITHUB_WORKSPACE"/custom/clash files/usr/bin/

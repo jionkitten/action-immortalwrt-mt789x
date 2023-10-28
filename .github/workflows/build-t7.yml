@@ -46,6 +46,14 @@ jobs:
           sudo mkdir -p /workdir
           sudo chown $USER:$GROUPS /workdir
 
+      - name: Maximize disk space
+        run: |
+          sudo rm -rf /usr/share/dotnet
+          sudo rm -rf /usr/local/lib/android
+          sudo rm -rf /opt/ghc
+          sudo rm -rf /opt/hostedtoolcache/CodeQL
+          sudo docker image prune --all --force
+
       - name: Clone source code
         working-directory: /workdir
         run: |
@@ -139,18 +147,3 @@ jobs:
           tag_name: ${{ steps.tag.outputs.release_tag }}
           body_path: release.txt
           files: ${{ env.FIRMWARE }}/*
-
-      - name: Delete workflow runs
-        uses: GitRML/delete-workflow-runs@main
-        with:
-          retain_days: 1
-          keep_minimum_runs: 3
-
-      - name: Remove old Releases
-        uses: dev-drprasad/delete-older-releases@v0.1.0
-        if: env.UPLOAD_RELEASE == 'true' && !cancelled()
-        with:
-          keep_latest: 3
-          delete_tags: true
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
