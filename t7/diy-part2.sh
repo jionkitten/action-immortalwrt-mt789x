@@ -48,4 +48,4 @@ chmod a+x files/usr/bin/mosdns
 
 mkdir -p files/etc/clash
 curl -LO https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip
-unzip metacubexd-gh-pages.zip -d files/etc/clash
+unzip gh-pages.zip -d files/etc/clash
