@@ -3,6 +3,7 @@
 CUR_PWD=$(pwd)
 
 cp "$GITHUB_WORKSPACE"/custom/luci-* feeds/luci
+rm feeds/luci/applications/luci-app-zerotier/root/etc/init.d/zerotier
 cd feeds/luci && git apply luci-*
 cd "$CUR_PWD"
 
