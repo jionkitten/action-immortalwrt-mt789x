@@ -3,7 +3,9 @@
 CUR_PWD=$(pwd)
 
 cp "$GITHUB_WORKSPACE"/custom/luci-* feeds/luci
-rm feeds/luci/applications/luci-app-zerotier/root/etc/init.d/zerotier
+rm feeds/luci/applications/luci-app-zerotier/root/etc/ -rf
+mkdir feeds/luci/applications/luci-app-zerotier/root/etc/init.d -p
+cp feeds/packages/net/zerotier/files/etc/init.d/zerotier feeds/luci/applications/luci-app-zerotier/root/etc/init.d/
 cd feeds/luci && git apply luci-*
 cd "$CUR_PWD"
 
@@ -33,7 +35,7 @@ mkdir -p files/usr/bin
 CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
 curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
 gzip -d files/usr/bin/clash.gz
-chmod a+x /usr/bin/clash
+chmod a+x files/usr/bin/clash
 
 # revert to version 20230209 VLess bug
 # cp "$GITHUB_WORKSPACE"/custom/clash files/usr/bin/
