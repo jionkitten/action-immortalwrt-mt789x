@@ -1,0 +1,200 @@
+log:
+  level: error
+  file: ""
+
+data_providers:
+  - tag: geosite
+    file: /tmp/geodata/geosite.dat
+    auto_reload: true
+  - tag: geoip
+    file: /tmp/geodata/geoip.dat
+    auto_reload: true
+  - tag: local_ptr
+    file: /tmp/mosdns/local_ptr.txt
+    auto_reload: false
+  - tag: direct
+    file: /tmp/mosdns/direct.txt
+    auto_reload: true
+  - tag: remote
+    file: /tmp/mosdns/remote.txt
+    auto_reload: true
+  - tag: block
+    file: /tmp/mosdns/block.txt
+    auto_reload: true
+
+plugins:
+  - tag: main_cache
+    type: cache
+    args:
+      size: 20480
+      lazy_cache_ttl: 86400
+      lazy_cache_reply_ttl: 10
+
+  - tag: modify_ttl
+    type: ttl
+    args:
+      minimal_ttl: 30
+
+  - tag: query_is_always_direct
+    type: query_matcher
+    args:
+      domain:
+        - "provider:direct"
+        - "provider:geosite:apple-cn,ookla-speedtest,microsoft@cn"
+
+  - tag: query_is_cn
+    type: query_matcher
+    args:
+      domain:
+        - "provider:geosite:geolocation-cn"
+
+  - tag: query_is_remote
+    type: query_matcher
+    args:
+      domain:
+        - "provider:geosite:geolocation-!cn"
+        - "provider:remote"
+
+  - tag: query_from_host
+    type: query_matcher
+    args:
+      client_ip:
+        - "192.168.1.1"
+        - "127.0.0.1"
+
+  - tag: query_is_ad_domain
+    type: query_matcher
+    args:
+      domain:
+        - "provider:block"
+        # - "provider:geosite:category-ads-all"
+
+  - tag: query_is_local_ptr
+    type: query_matcher
+    args:
+      qtype: [12]
+      domain:
+        - "provider:local_ptr"
+
+  - tag: query_is_local_domain
+    type: query_matcher
+    args:
+      domain:
+        - "lan"
+
+  - tag: response_is_cn
+    type: response_matcher
+    args:
+      ip:
+        - "provider:geoip:cn"
+
+  - tag: forward_server_i
+    type: fast_forward
+    args:
+      upstream:
+        - addr: https://dns.alidns.com/dns-query
+          dial_addr: 2400:3200::1
+        - addr: https://doh.pub/dns-query
+          dial_addr: 120.53.53.53
+  - tag: forward_server
+    type: sequence
+    args:
+      exec:
+        - main_cache
+        - forward_server_i
+        - modify_ttl
+
+  - tag: forward_server_proxy_i
+    type: fast_forward
+    args:
+      upstream:
+        - addr: tls://8.8.4.4
+          socks5: 127.0.0.1:7890
+          enable_pipeline: true
+        - addr: tls://1.0.0.1
+          socks5: 127.0.0.1:7890
+          enable_pipeline: true
+  - tag: forward_server_proxy
+    type: sequence
+    args:
+      exec:
+        - main_cache
+        - forward_server_proxy_i
+        - modify_ttl
+
+  - tag: forward_clash
+    type: fast_forward
+    args:
+      upstream:
+        - addr: udp://127.0.0.1:15353
+
+  - tag: forward_dnsmasq_i
+    type: fast_forward
+    args:
+      upstream:
+        - addr: udp://127.0.0.1:5353
+  - tag: forward_dnsmasq
+    type: sequence
+    args:
+      exec:
+        - if: "!query_from_host"
+          exec:
+            - forward_dnsmasq_i
+          else_exec:
+            - _new_nxdomain_response
+
+  - tag: clash_upstream_dns
+    type: sequence
+    args:
+      exec:
+        - forward_server
+        - _return
+
+  - tag: main
+    type: sequence
+    args:
+      exec:
+        - if: query_is_ad_domain
+          exec:
+            - _new_nxdomain_response
+            - _return
+
+        - if: "query_is_always_direct"
+          exec:
+            - forward_server
+            - _return
+
+        - if: "query_is_local_ptr || query_is_local_domain"
+          exec:
+            - forward_dnsmasq_i
+            - _return
+
+        - if: "! [_qtype_A_AAAA] || query_is_cn"
+          exec:
+            - forward_server
+            - _return
+          else_exec:
+            - if: query_is_remote
+              exec:
+                - forward_clash
+                - _return
+
+        - forward_server_proxy
+        - if: "[_response_valid_answer] && ! response_is_cn"
+          exec:
+            - _drop_response
+            - forward_clash
+
+servers:
+  - exec: clash_upstream_dns
+    listeners:
+      - protocol: udp
+        addr: "0.0.0.0:5356"
+      - protocol: tcp
+        addr: "0.0.0.0:5356"
+  - exec: main
+    listeners:
+      - protocol: udp
+        addr: "0.0.0.0:53"
+      - protocol: tcp
+        addr: "0.0.0.0:53"

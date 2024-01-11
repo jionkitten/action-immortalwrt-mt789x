@@ -26,6 +26,11 @@ cd "$CUR_PWD"
 # svn export https://github.com/sbwml/packages_lang_golang/branches/19.x feeds/packages/lang/golang
 # sudo apt install libfuse-dev
 # git clone https://github.com/sbwml/luci-app-alist package/alist
+mkdir -p files/etc
+cp -r "$GITHUB_WORKSPACE"/custom/etc/* files/etc
+
+mkdir -p files/etc/init.d
+cp "$GITHUB_WORKSPACE"/custom/init.d/* files/etc/init.d
 
 mkdir -p files/usr/share/geodata
 curl -L https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download/geosite.dat -o "files/usr/share/geodata/geosite.dat"
@@ -50,6 +55,6 @@ chmod a+x files/usr/bin/mosdns
 # tar xzf subconverter_aarch64.tar.gz
 # mv ./subconverter files/etc/
 
-mkdir -p files/etc/clash
+mkdir -p files/etc
 curl -LO https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip
-unzip gh-pages.zip -d files/etc/clash
+unzip gh-pages.zip -d files/etc
