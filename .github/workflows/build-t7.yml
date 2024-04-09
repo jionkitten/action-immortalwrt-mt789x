@@ -72,6 +72,10 @@ jobs:
           prefix: ${{ github.workspace }}/openwrt
 
       - name: Load custom feeds
+        env:
+          FILE_MHM_CONFIG: ${{ secrets.FILE_MHM_CONFIG }}
+          FILE_MOS_CONFIG: ${{ secrets.FILE_MOS_CONFIG }}
+          FILE_MOS_DIRECT: ${{ secrets.FILE_MOS_DIRECT }}
         run: |
           [ -e $FEEDS_CONF ] && mv $FEEDS_CONF openwrt/feeds.conf.default
           chmod +x $DIY_P1_SH

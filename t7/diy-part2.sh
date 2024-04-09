@@ -55,6 +55,10 @@ chmod a+x files/usr/bin/mosdns
 # tar xzf subconverter_aarch64.tar.gz
 # mv ./subconverter files/etc/
 
-mkdir -p files/etc
+echo $FILE_MOS_DIRECT > files/etc/mosdns/direct.txt
+echo $FILE_MOS_CONFIG > files/etc/mosdns/config.yaml
+echo $FILE_MHM_CONFIG > files/etc/clash/config.yaml
+
 curl -LO https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip
-unzip gh-pages.zip -d files/etc
+unzip gh-pages.zip -d files/etc/clash
+mv files/etc/clash/metacubexd-gh-pages files/etc/clash/metacubexd
