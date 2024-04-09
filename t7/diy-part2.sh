@@ -37,7 +37,7 @@ curl -L https://github.com/Loyalsoldier/v2ray-rules-dat/releases/latest/download
 curl -L https://github.com/Loyalsoldier/geoip/releases/latest/download/geoip-only-cn-private.dat -o "files/usr/share/geodata/geoip.dat"
 
 mkdir -p files/usr/bin
-CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha")) | .browser_download_url' -r)
+CLASH_META_URL=$(curl https://api.github.com/repos/MetaCubeX/mihomo/releases/tags/Prerelease-Alpha | jq -c '.assets[] | select(.name | contains("linux-arm64-alpha") and endswith("gz")) | .browser_download_url' -r)
 curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
 gzip -d files/usr/bin/clash.gz
 chmod a+x files/usr/bin/clash
