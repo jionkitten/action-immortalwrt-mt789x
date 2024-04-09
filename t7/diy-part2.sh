@@ -42,6 +42,7 @@ curl -L $CLASH_META_URL -o files/usr/bin/clash.gz
 gzip -d files/usr/bin/clash.gz
 chmod a+x files/usr/bin/clash
 
+echo "clash download done"
 # revert to version 20230209 VLess bug
 # cp "$GITHUB_WORKSPACE"/custom/clash files/usr/bin/
 # chmod a+x files/usr/bin/clash
@@ -51,14 +52,17 @@ unzip mosdns-linux-arm64.zip -d /tmp
 cp /tmp/mosdns files/usr/bin/
 chmod a+x files/usr/bin/mosdns
 
+echo "mosdns download done"
 # curl -LO https://github.com/MetaCubeX/subconverter/releases/download/Alpha/subconverter_aarch64.tar.gz
 # tar xzf subconverter_aarch64.tar.gz
 # mv ./subconverter files/etc/
 
-echo $FILE_MOS_DIRECT > files/etc/mosdns/direct.txt
-echo $FILE_MOS_CONFIG > files/etc/mosdns/config.yaml
-echo $FILE_MHM_CONFIG > files/etc/clash/config.yaml
-
 curl -LO https://github.com/MetaCubeX/metacubexd/archive/gh-pages.zip
 unzip gh-pages.zip -d files/etc/clash
 mv files/etc/clash/metacubexd-gh-pages files/etc/clash/metacubexd
+
+echo "metacubexd download done"
+
+echo $FILE_MOS_DIRECT > files/etc/mosdns/direct.txt
+echo $FILE_MOS_CONFIG > files/etc/mosdns/config.yaml
+echo $FILE_MHM_CONFIG > files/etc/clash/config.yaml
