@@ -7,7 +7,7 @@ rm feeds/luci/applications/luci-app-zerotier/root/etc/ -rf
 mkdir feeds/luci/applications/luci-app-zerotier/root/etc/init.d -p
 cp feeds/packages/net/zerotier/files/etc/init.d/zerotier feeds/luci/applications/luci-app-zerotier/root/etc/init.d/
 
-cp "$GITHUB_WORKSPACE"/t7-2/mediatek.patch CUR_PWD
+cp "$GITHUB_WORKSPACE"/t7-2/mediatek.patch $CUR_PWD
 git apply mediatek.patch
 # cd feeds/luci && git apply luci-*
 cd "$CUR_PWD"
