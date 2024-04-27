@@ -8,7 +8,7 @@
 # Description: Build OpenWrt using GitHub Actions
 #
 
-name: Build T7
+name: Build T7 2
 
 on:
   - repository_dispatch
@@ -18,12 +18,12 @@ permissions:
   contents: write
 
 env:
-  REPO_URL: https://github.com/hanwckf/immortalwrt-mt798x
+  REPO_URL: https://github.com/padavanonly/immortalwrt-mt798x
   REPO_BRANCH: openwrt-21.02
   FEEDS_CONF: feeds.conf.default
-  CONFIG_FILE: t7/.config
-  DIY_P1_SH: t7/diy-part1.sh
-  DIY_P2_SH: t7/diy-part2.sh
+  CONFIG_FILE: t7-2/.config
+  DIY_P1_SH: t7-2/diy-part1.sh
+  DIY_P2_SH: t7-2/diy-part2.sh
   UPLOAD_BIN_DIR: false
   UPLOAD_FIRMWARE: true
   UPLOAD_RELEASE: true
